@@ -27,6 +27,8 @@ export const dataSlice = createSlice({
     }
 })
 
+export const { setData, incrementId, decrementId, customId, clearData } = dataSlice.actions
+
 export const fetchData = () => {
     const dataThunk = async (dispatch, getState) => {
         let state= getState()
@@ -36,6 +38,6 @@ export const fetchData = () => {
     }
     return dataThunk
 }
-export const { setData, incrementId, decrementId, customId, clearData } = dataSlice.actions
+
 
 export default dataSlice.reducer

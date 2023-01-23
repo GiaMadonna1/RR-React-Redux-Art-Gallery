@@ -1,12 +1,14 @@
 import './App.css';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchData, incrementId, decrementId, clearData, setData, customId } from './ducks/dataSlice';
+import { useDispatch, useSelector, connect } from 'react-redux';
+import { fetchData, incrementId, decrementId, clearData, customId } from './ducks/dataSlice';
+
+
 
 
 function App(props) {
   const dispatch = useDispatch()
-  const data = useSelector(state => state.data)
+  const data = useSelector((state) => state.data)
 
   const renderImg = () => {
     if(data.apiData.primaryImage) {
@@ -16,7 +18,9 @@ function App(props) {
     }
   }
 
-
+  useEffect(()=>{
+  dispatch(fetchData())
+}, [props.objectId, dispatch])
 
   return (
     <div className="App">
@@ -26,11 +30,21 @@ function App(props) {
         <button onClick={() => dispatch(incrementId())}>Next</button>
         <button onClick={() => dispatch(decrementId())}>Back</button>
       </div>
+        <input value={ data.objectId } onChange={(e)=>{
+          dispatch(customId(Number(e.target.value)))
+        }} />
       <div>
-        {data.objectId}
-        {renderImg()}
+          {data.objectId}
+          {renderImg()}
       </div>
     </div>
   );
 }
-export default App
+
+const mapStateToProps = (state, ownProps) => ({
+  objectId: state.data.objectId
+})
+
+
+
+export default connect(mapStateToProps)(App);
